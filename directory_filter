@@ -1,0 +1,26 @@
+{% assign categories = '' %}
+{% for tag in blogs['directory'].tags %} 
+{% if tag contains 'directory_' %}
+{% capture categories %}{% unless categories == blank  %}{{ categories }}|{% endunless %}{{ tag | split: '_' | first }}{% endcapture %}
+{% endif %}
+{% endfor %}
+{% assign cat_array = categories | split: '|' | uniq %}
+<div class="grid-uniform">
+  {% for cat_item in cat_array %}
+   
+  <ul class="cat-list advanced-filters {{cat_item}}">
+    {% for tag in blogs['directory'].tags %} 
+    {% assign cat = tag | split: '_' | first %}
+    {% if cat != tag and cat_item == cat %}
+    {% if current_tags contains tag %}
+    <li class="{{ tag | handle }} cat-option advanced-filter active-filter" data-group="{{ cat_item }}" data-handle="{{ tag | handle }}"> {{ tag | remove_first: cat_item | remove_first: '_' |replace: '-',' '| replace: 'and','&'| link_to_remove_tag: tag }}</li>
+    {% else %}
+    <li class="{{ tag | handle }} cat-option advanced-filter" data-group="{{ cat_item }}" data-handle="{{ tag | handle }}">{{ tag | remove_first: cat_item  | remove_first: '_' |replace: '-',' '| replace: 'and','&' |link_to_add_tag: tag }}</li>
+    {% endif %}
+    {%endif%}
+    {%endfor%}
+  </ul>
+  {%endfor%}
+</div>
+
+ <div class="clr"></div>
